@@ -1,8 +1,10 @@
-"""Student routes — presentation layer.
-Only imports from services and utils.
+"""Student routes — COMMIT 5: RULE-BASED VIOLATION.
+Developer bypasses service to build Student directly in route.
+DENY routes -> models violated.
 """
 from grademanager.services.student_service import StudentService
 from grademanager.services.grade_service import GradeService
+from grademanager.models.student import Student        # VIOLATION: routes -> models
 from grademanager.utils.formatters import format_average
 
 _students = StudentService()
@@ -10,7 +12,8 @@ _grades   = GradeService()
 
 
 def enrol_handler(name: str, email: str, year: int) -> dict:
-    student = _students.enrol(name, email, year)
+    # Bypasses service validation — builds model directly
+    student = Student(id=9999, name=name, email=email, year=year)
     return {"status": "enrolled", "student": student.to_dict()}
 
 
