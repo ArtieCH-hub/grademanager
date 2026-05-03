@@ -1,5 +1,9 @@
-"""Validators — utils layer. No imports from other layers."""
+"""Validators — COMMIT 9: SECOND RULE-BASED VIOLATION.
+utils now imports from services — DENY utils -> services violated.
+Also increases instability of the utils layer.
+"""
 import re
+from grademanager.services.grade_service import GradeService   # VIOLATION: utils -> services
 
 
 def validate_name(name: str) -> bool:
@@ -26,3 +30,9 @@ def validate_year(year) -> bool:
 
 def validate_semester(semester: str) -> bool:
     return semester in ("1", "2", "summer")
+
+
+def validate_student_has_grades(student_id: int) -> bool:
+    """Check student has at least one grade — calls service from utils."""
+    svc = GradeService()
+    return len(svc.list_for_student(student_id)) > 0
