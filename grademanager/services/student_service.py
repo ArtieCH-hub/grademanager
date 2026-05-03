@@ -1,19 +1,17 @@
-"""Student service — COMMIT 6: CIRCULAR DEPENDENCY introduced.
-StudentService now imports GradeService to check student grade count.
-GradeService imports StudentService to validate student exists.
-This creates a circular dependency detected by DFS — NOT by any rule.
+"""Student service — COMMIT 10: fix circular dependency.
+Remove GradeService import from StudentService.
+Grade count now passed in rather than fetched internally.
+Circular dependency resolved but other violations remain.
 """
 from grademanager.models.student import Student
 from grademanager.utils.validators import validate_name, validate_email
 from grademanager.utils.formatters import format_student_display
-from grademanager.services.grade_service import GradeService   # CIRCULAR
 
 
 class StudentService:
     def __init__(self):
         self._store   = {}
         self._next_id = 1
-        self._grades  = GradeService()   # completes the circle
 
     def enrol(self, name, email, year) -> Student:
         if not validate_name(name):
@@ -39,7 +37,3 @@ class StudentService:
 
     def display(self, student_id) -> str:
         return format_student_display(self.get(student_id))
-
-    def get_grade_count(self, student_id: int) -> int:
-        """Check how many grades a student has — calls GradeService."""
-        return len(self._grades.list_for_student(student_id))
