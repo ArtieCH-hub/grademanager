@@ -1,0 +1,3 @@
+from grademanager.services.student_service import StudentService
+from grademanager.services.grade_service import GradeService
+from grademanager.services.module_service import ModuleService
